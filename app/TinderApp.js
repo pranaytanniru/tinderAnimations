@@ -8,7 +8,8 @@ import {
   Dimensions,
   Image,
   Animated,
-  PanResponder
+  PanResponder,
+  TouchableOpacity
 } from 'react-native';
 const SCREEN_HEIGHT= Dimensions.get('window').height
 const SCREEN_WIDTH= Dimensions.get('window').width
@@ -74,6 +75,9 @@ export default class TinderApp extends Component {
           }).start(()=>{
             this.setState({currentIndex:this.state.currentIndex+1},()=>{
               this.position.setValue({x:0,y:0})
+              if(this.state.currentIndex===Images.length){
+                this.setState({currentIndex:0})
+              }
             })
           })
         }
@@ -83,6 +87,9 @@ export default class TinderApp extends Component {
           }).start(()=>{
             this.setState({currentIndex:this.state.currentIndex+1},()=>{
               this.position.setValue({x:0,y:0})
+              if(this.state.currentIndex===Images.length){
+                this.setState({currentIndex:0})
+              }
             })
           })
         }
@@ -142,8 +149,12 @@ export default class TinderApp extends Component {
         <View style={{flex:1}}>
           {this._renderImages()}
         </View>
-        <View style={{height:60}}>
-
+        <View style={{height:60}} style={{alignItems:'center',paddingBottom:15}}>
+          <TouchableOpacity style={{borderRadius:10,padding:5}} onPress={()=>{this.setState({currentIndex:0})}}>
+            <Image
+            style={{height:SCREEN_WIDTH/20,width:SCREEN_WIDTH/20,resizeMode:'contain'}}
+            source={require('./assets/reset.png')}/>
+          </TouchableOpacity>
         </View>
       </View>
     );
