@@ -1,1 +1,2 @@
 # tinderAnimations
+![](gitImages/animations.gif)
