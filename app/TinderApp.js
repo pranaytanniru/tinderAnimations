@@ -26,7 +26,8 @@ export default class TinderApp extends Component {
     super()
     this.position=new Animated.ValueXY()
     this.state={
-      currentIndex:0
+      currentIndex:0,
+      images:[],
     }
     this.rotate=this.position.y.interpolate({
       inputRange:[-SCREEN_WIDTH/2,0,SCREEN_WIDTH/2],
@@ -61,8 +62,23 @@ export default class TinderApp extends Component {
       extrapolate:'clamp'
     })
 
+    this.getImages=this.getImages.bind(this);
+
   }
+
+  getImages(){
+    let urls=[];
+    for (var i = 0; i < 10; i++) {
+      let name="15241A05J"+i+".JPG"
+      let url="http://exams.griet.in/photosrgb/"+name
+      urls.push(url)
+    }
+    this.setState({images:urls})
+  }
+
+
   componentWillMount(){
+    this.getImages()
     this.PanResponder=PanResponder.create({
       onStartShouldSetPanResponder:(evt,gestureState)=>true,
       onPanResponderMove:(evt,gestureState)=>{
@@ -75,9 +91,6 @@ export default class TinderApp extends Component {
           }).start(()=>{
             this.setState({currentIndex:this.state.currentIndex+1},()=>{
               this.position.setValue({x:0,y:0})
-              if(this.state.currentIndex===Images.length){
-                this.setState({currentIndex:0})
-              }
             })
           })
         }
@@ -87,9 +100,6 @@ export default class TinderApp extends Component {
           }).start(()=>{
             this.setState({currentIndex:this.state.currentIndex+1},()=>{
               this.position.setValue({x:0,y:0})
-              if(this.state.currentIndex===Images.length){
-                this.setState({currentIndex:0})
-              }
             })
           })
         }
@@ -103,7 +113,7 @@ export default class TinderApp extends Component {
   }
 
   _renderImages(){
-    return Images.map((image,index)=>{
+    return this.state.images.map((image,index)=>{
       if(index<this.state.currentIndex){
         return null
       }
@@ -118,7 +128,7 @@ export default class TinderApp extends Component {
             </Animated.View>
             <Image
             style={{flex:1,height:null,width:null,resizeMode:'cover',borderRadius:20}}
-            source={image.uri}/>
+            source={{uri:image}}/>
             <Animated.View style={{opacity:this.dislikeOpacity,transform:[{rotate:'30deg'}],position:'absolute',top:50,right:40,zIndex:1000}}>
               <Text style={{borderWidth:1,borderColor:'red',color:'red',fontSize:32,fontWeight:'800',padding:10}}>NOPE</Text>
             </Animated.View>
